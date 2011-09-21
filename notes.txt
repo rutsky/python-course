@@ -1,0 +1,29 @@
+Примеры использования Python:
+ * OpenCV
+ * Gimp
+ * Blender
+ * PostgreSQL
+ * sagemath
+ * Транзас - тренажер, juGIS
+ * SCons
+ * ESRI
+ * Maya
+ * Google
+ * Google App Engine
+ * Boost Python
+ * Веб-сайт
+ * PySide
+ * CI Buildbot
+ * Утилиты системы
+
+Документация по Python на русском.
+
+Общий план первой лекции:
+1. Первая часть --- 30 минут + вопросы
+ * Что такое Python
+ * Зачем он нужен и как он используется
+2. Вторая часть --- 30 минут + вопросы
+ * Введение в Python
+ * Установка Python
+ * Простая практика
+
