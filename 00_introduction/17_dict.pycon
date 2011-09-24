@@ -1,0 +1,27 @@
+>>> # Словарь --- контейнер, хранящий пары (ключ, значение), и позволяющий
+... # быстро находить по ключу соответствующее значение
+... tel = {'jack': 4098, 'sape': 4139}
+>>> tel['jack']
+4098
+>>> tel['guido'] = 4127
+>>> tel
+{'sape': 4139, 'jack': 4098, 'guido': 4127}
+>>> del tel['sape']
+>>> tel
+{'jack': 4098, 'guido': 4127}
+>>> tel.keys()
+['jack', 'guido']
+>>> tel.values()
+[4098, 4127]
+>>> tel.items()
+[('jack', 4098), ('guido', 4127)]
+>>> for name, phone in tel.items():
+...     print name, 'has phone number', phone
+... 
+jack has phone number 4098
+guido has phone number 4127
+>>> 'guido' in tel
+True
+>>> 'sam' in tel
+False
+>>> 
