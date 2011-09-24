@@ -1,0 +1,26 @@
+>>> # Cтроки можно задавать следующим образом:
+... 'spam eggs'
+'spam eggs'
+>>> 'doesn\'t'
+"doesn't"
+>>> "doesn't"
+"doesn't"
+>>> '"Yes," he said.'
+'"Yes," he said.'
+>>> "\"Yes,\" he said."
+'"Yes," he said.'
+>>> '"Isn\'t," she said.'
+'"Isn\'t," she said.'
+>>> "first word \
+... second word"
+'first word second word'
+>>> print "first line \nsecondline"
+first line 
+secondline
+>>> r"line with \n in middle"
+'line with \\n in middle'
+>>> """Multiline with ' or "
+... Yes.
+... """
+'Multiline with \' or "\nYes.\n'
+>>> 
