@@ -1,0 +1,356 @@
+bob@acer-6930g:~$ python
+Python 2.7.1+ (r271:86832, Apr 11 2011, 18:13:53) 
+[GCC 4.5.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> print "Hello, World!"
+Hello, World!
+>>> 2 ** 1000
+10715086071862673209484250490600018105614048117055336074437503883703510511249361224931983788156958581275946729175531468251871452856923140435984577574698574803934567774824230985421074605062371141877954182153046474983581941267398767559165543946077062914571196477686542167660429831652624386837205668069376L
+>>> "first 
+  File "<stdin>", line 1
+    "first 
+          ^
+SyntaxError: EOL while scanning string literal
+>>> "first\nsecond"
+'first\nsecond'
+>>> print "first\nsecond"
+first
+second
+>>> print """first
+... second
+... third"""
+first
+second
+third
+>>> print \
+... 12 * 3
+36
+>>> word = "HelpA"
+>>> word[]
+  File "<stdin>", line 1
+    word[]
+         ^
+SyntaxError: invalid syntax
+>>> "123" - "adv"
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s) for -: 'str' and 'str'
+>>> [1, 2] > 3
+True
+>>> [1, 2] < 3
+False
+>>> [2] > 3
+True
+>>> [1, 2, 3] > [1, 2, 0]
+True
+>>> [1, 2, 3] > [1, 2, 5]
+False
+>>> [2, 4] > [6, 0]
+False
+>>> [2, 4] < [6, 0]
+True
+>>> "abcd" > "abdd"
+False
+>>> "abcd" > "abdd"
+False
+>>> a, b = 1
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'int' object is not iterable
+>>> a, b = 1, 2
+>>> a = b = 1
+>>> int("abc")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: invalid literal for int() with base 10: 'abc'
+>>> int("0x10")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: invalid literal for int() with base 10: '0x10'
+>>> a = ['aaa', 'bbbbb', 'cc']
+>>> i = 0
+>>> for i < len(a):
+  File "<stdin>", line 1
+    for i < len(a):
+          ^
+SyntaxError: invalid syntax
+>>> while i < len(a):
+...     print a[i], len(a[i])
+...     i += 1 # i = i + 1
+... 
+aaa 3
+bbbbb 5
+cc 2
+>>> 
+>>> a = range(10)
+>>> for i in a:
+...     if i == 5:
+...         break
+...     
+...     print i
+... 
+0
+1
+2
+3
+4
+>>> for i in a:
+...     if i == 5:
+...         break
+...     print i
+... else:
+...     print "not break!"
+... 
+0
+1
+2
+3
+4
+>>> for i in a:
+...     print i
+... else:
+...     print "not break!"
+... 
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+not break!
+>>> for i in a:
+...     print i
+...     
+...     print "not break!"
+... 
+0
+not break!
+1
+not break!
+2
+not break!
+3
+not break!
+4
+not break!
+5
+not break!
+6
+not break!
+7
+not break!
+8
+not break!
+9
+not break!
+>>> for i in a:
+...     print i
+... print "not break!"
+  File "<stdin>", line 3
+    print "not break!"
+        ^
+SyntaxError: invalid syntax
+>>> for i in a:
+...     print i
+... 
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+>>> for i in a:
+...     print i
+... print "not break!"
+  File "<stdin>", line 3
+    print "not break!"
+        ^
+SyntaxError: invalid syntax
+>>> a = {1: }
+  File "<stdin>", line 1
+    a = {1: }
+            ^
+SyntaxError: invalid syntax
+>>> a = {1: "one", 2: "two"}
+>>> a
+{1: 'one', 2: 'two'}
+>>> for pair in a.items():
+...     print pair
+... 
+(1, 'one')
+(2, 'two')
+>>> a.items()
+[(1, 'one'), (2, 'two')]
+>>> c, d = (1, 'one')
+>>> a
+{1: 'one', 2: 'two'}
+>>> c
+1
+>>> d
+'one'
+>>> a = (1, 2, 3)
+>>> a[1]
+2
+>>> a[1] = 2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'tuple' object does not support item assignment
+>>> aa, bb = 1, 2
+>>> 1, 2
+(1, 2)
+>>> for p, q in a.items():
+...     print p, "-", q
+... 
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'tuple' object has no attribute 'items'
+>>> a = {1: "one", 2: "two"}
+>>> for p, q in a.items():
+...     print p, "-", q
+... 
+1 - one
+2 - two
+>>> print 1
+1
+>>> print 1,
+1
+>>> for p, q in a.items():
+...     print p, "-", q,
+... 
+1 - one 2 - two
+>>> dd = 2; vv = 4
+>>> def f(a, b, c=30, d=[])
+  File "<stdin>", line 1
+    def f(a, b, c=30, d=[])
+                          ^
+SyntaxError: invalid syntax
+>>> def f(a, b, c=30, d=[]):
+...     print a,b,c,d
+... 
+>>> d(1,2,3,4)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object is not callable
+>>> f(1,2,3,4)
+1 2 3 4
+>>> f(d=1,c=2,b=3,a=4)
+4 3 2 1
+>>> def f(a, b, *args):
+...     print a
+...     print n
+...     print args
+... 
+>>> n
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'n' is not defined
+>>> f(1,2)
+1
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in f
+NameError: global name 'n' is not defined
+>>> def f(a, b, *args):
+...     print a,"\n",b,"\n",args
+... 
+>>> f(1, 2)
+1 
+2 
+()
+>>> f(1, 2, 20, [], "aaa")
+1 
+2 
+(20, [], 'aaa')
+>>> def f(a, b, *args):
+...     print a,"\n",b,"\n",args, len(args)
+... 
+>>> f(1, 2, 20, [], "aaa")
+1 
+2 
+(20, [], 'aaa') 3
+>>> a = 1
+>>> a is 1
+True
+>>> b = 1
+>>> a is b
+True
+>>> a = [1, []]
+>>> b = a[:]
+>>> a
+[1, []]
+>>> b
+[1, []]
+>>> a is b 
+False
+>>> a[0] is b[0]
+True
+>>> a[1] is b[1]
+True
+>>> a[1].append(30)
+>>> b
+[1, [30]]
+>>> def g(b):
+...     b += 1
+...     print b
+... 
+>>> F = g
+>>> del F
+>>> def f(a)
+  File "<stdin>", line 1
+    def f(a)
+           ^
+SyntaxError: invalid syntax
+>>> def f(a):
+...     a.append(30)
+... 
+>>> f(g)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 2, in f
+AttributeError: 'function' object has no attribute 'append'
+>>> def caller(func):
+...     func()
+... 
+>>> def no_arg():
+...     print "no_arg!"
+... 
+>>> caller(no_arg)
+no_arg!
+>>> g
+<function g at 0x29358c0>
+>>> def one_arg():
+... 
+  File "<stdin>", line 2
+    
+    ^
+IndentationError: expected an indented block
+>>> def one_arg():
+... 
+  File "<stdin>", line 2
+    
+    ^
+IndentationError: expected an indented block
+>>> def one_arg(arg):
+...     print arg
+... 
+>>> on_arg(30)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'on_arg' is not defined
+>>> one_arg(30)
+30
+>>> g
+<function g at 0x29358c0>
+>>> g.append = one_arg
+>>> f(g)
+30
+>>> 
+
