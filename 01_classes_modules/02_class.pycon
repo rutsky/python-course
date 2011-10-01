@@ -1,0 +1,35 @@
+>>> # Класс определяется с помощью оператора `class':
+... # class ИмяКласса:
+... #     выражение1
+... #     выражение2
+... #     ...
+... class MyClass:
+...     def f(self):
+...         return 'Hello!'
+... 
+>>> MyClass # - класс
+<class __main__.MyClass at 0x1c47e88>
+>>> x = MyClass()
+>>> x       # - экземпляр (instance) класса MyClass
+<__main__.MyClass instance at 0x1caf7a0>
+>>> x.f()   # вызываем метод класса
+'Hello!'
+>>> class Car:
+...     """Класс автомобиля (это docstring)"""
+...     def __init__(self, name):
+..          # Конструктор класса --- этот метод вызывается при инициализации 
+...         # вновь созданного экземпляра класса.
+...         # Первый аргумент `self' --- экземпляр класса (кого инициализируем)
+...         self.car_name = name # --- записываем в атрибут экземпляра класса с
+...                              # именем `car_name' значение переменной `name'
+...     def hello(self): 
+...         # Определим метод класса hello()
+...         return "Hello, my name is " + self.car_name + "!"
+... 
+>>> # Создаём экземпляр класса (в конструктор передаётся name="aa030a")
+... car_instance = Car("aa030a")
+>>> car_instance.car_name
+'aa030a'
+>>> car_instance.hello()
+'Hello, my name is aa030a!'
+>>>

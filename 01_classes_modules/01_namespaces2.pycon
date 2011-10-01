@@ -1,0 +1,33 @@
+>>> # Оператор `def' создаёт объект-функцию и добавляет её в локальную область видимости:
+... def f(arg):
+...     v = 30
+...     return locals(), globals() # вернём локальную и глобальную о.в. для данной строки
+... 
+>>> # Имя `f' занеслось в локальную о.в.
+... locals()
+{'f': <function f at 0x24a2848>, '__builtins__': <module '__builtin__' (built-in)>, '__package__': None, '__name__': '__main__', '__doc__': None}
+>>> f("aaa")[0] # locals() из внутренности f()
+{'arg': 'aaa', 'v': 30}
+>>> # globals() из f() совпадает с globals из данного модуля
+... globals() is f("bbb")[1]
+True
+>>> # При каждом вызове функции, для тела функции создаётся новая локальная о.в. 
+... # Т.к. всё, что делает оператор `def' это создание нового объекта и помещение в локальную
+... # область видимости, то можно делать вложенные функции:
+... def f1(arg):
+...     s1 = "f1() local variable"
+...     def f2(arg2):
+...         return arg2, s1, some_glb_var # arg2 найдётся в локальной о.в., s1 во внешней локальной,
+...                                       # а some_glb_var будет искаться в глобальной о.в.
+...     return f2(30)
+... 
+>>> f1("test")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 9, in f1
+  File "<stdin>", line 7, in f2
+NameError: global name 'some_glb_var' is not defined
+>>> some_glb_var = "global variable"
+>>> f1("test")
+(30, 'f1() local variable', 'global variable')
+>>>
