@@ -1,0 +1,66 @@
+bob@acer-6930g:~/lection02$ 
+bob@acer-6930g:~/lection02$ ls
+hello.py
+bob@acer-6930g:~/lection02$ python hello.py 
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+({'arg': 'aaa', 'v': 12}, {'a': 30, 'f': <function f at 0x1950848>, '__builtins__': <module '__builtin__' (built-in)>, '__file__': 'hello.py', '__package__': None, '__name__': '__main__', '__doc__': None})
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+locals:  {'arg': 'aaa', 'v': 12}
+globals: {'a': 30, 'f': <function f at 0x12fd848>, '__builtins__': <module '__builtin__' (built-in)>, '__file__': 'hello.py', '__package__': None, '__name__': '__main__', '__doc__': None}
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+hello.py
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+30
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+10
+30
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+10
+30
+bob@acer-6930g:~/lection02$ python hello.py 
+  File "hello.py", line 16
+    print a
+    ^
+IndentationError: unexpected indent
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+10
+30
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+10
+30
+bob@acer-6930g:~/lection02$ python hello.py 
+Hello!
+start a: 30
+10
+end a: 30
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+start a: 30
+g1(): 10
+end a: 10
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+<function h2 at 0xaf2a28>
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+k: <function h2 at 0x1881a28>
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+k: <function h2 at 0x10a5aa0>
+h2()
+bob@acer-6930g:~/lection02$ python hello.py Hello!
+k: <function h2 at 0x2463a28>
+h2()
+h2()
+bob@acer-6930g:~/lection02$
