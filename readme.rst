@@ -5,6 +5,8 @@
 Спецкурс "Язык программирования Python" проводится в Физико-Математическом 
 лицее №30 Санкт-Петербурга по субботам в 16:00.
 
+Страница на сайте школы: `<http://school30.spb.ru/cgsg/python/>`_.
+
 Рекомендуемый учебник по Python:
 `http://ru.wikibooks.org/wiki/Учебник_Python_2.6
 <http://ru.wikibooks.org/wiki/%D0%A3%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA_Python_2.6>`_.
@@ -18,7 +20,7 @@
    `Скачать презентацию первой лекции.
    <https://github.com/rutsky/python-course/blob/master/00_introduction.pdf?raw=true>`_
 
-2. ООП в Python. Классы. Модули.
+2. ООП. Области видимости Python.
    
    `Скачать презентацию второй лекции.
    <https://github.com/rutsky/python-course/blob/master/01_oop_scopes.pdf?raw=true>`_
