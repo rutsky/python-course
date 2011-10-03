@@ -21,4 +21,4 @@
 2. ООП в Python. Классы. Модули.
    
    `Скачать презентацию второй лекции.
-   <https://github.com/rutsky/python-course/blob/master/01_classes_modules.pdf?raw=true>`_
+   <https://github.com/rutsky/python-course/blob/master/01_oop_scopes.pdf?raw=true>`_
