@@ -19,8 +19,10 @@
 
    `Скачать презентацию первой лекции.
    <https://github.com/rutsky/python-course/blob/master/00_introduction.pdf?raw=true>`_
+   `Аудиозапись (2:33, OGG, 26 MB). <http://ubuntuone.com/7JQwpM8dP7ykmmkaBlV90F>`_
 
 2. ООП. Области видимости Python.
    
    `Скачать презентацию второй лекции.
    <https://github.com/rutsky/python-course/blob/master/01_oop_scopes.pdf?raw=true>`_
+   `Аудиозапись (2:08, OGG, 72 MB). <http://ubuntuone.com/1KezpO2CQ9gucMMlDdWJQu>`_
