@@ -26,3 +26,8 @@
    `Скачать презентацию второй лекции.
    <https://github.com/rutsky/python-course/blob/master/01_oop_scopes.pdf?raw=true>`_
    `Аудиозапись (2:08, OGG, 72 MB). <http://ubuntuone.com/1KezpO2CQ9gucMMlDdWJQu>`_
+
+3. Классы. Модули. Практика.
+   
+   `Скачать презентацию третьей лекции.
+   <https://github.com/rutsky/python-course/blob/master/02_classes_modules.pdf?raw=true>`_
