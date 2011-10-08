@@ -1,0 +1,32 @@
+>>> class User:
+...     # Объявления в классе являются статическими, т.е. общими для всех
+...     # экземпляров класса.
+...     greeting = "Hello " # статический член
+...     def __init__(self, name):
+...         self.my_name = name 
+...     def hello(self):
+...         return self.greeting + self.my_name
+... 
+>>> peter = User("Peter")
+>>> sam = User("Sam")
+>>> peter.hello()
+'Hello Peter'
+>>> sam.hello()
+'Hello Sam'
+>>> # Изменим статический член User.greeting
+... User.greeting = "Hi "
+>>> peter.hello()
+'Hi Peter'
+>>> sam.hello()
+'Hi Sam'
+>>> def new_hello(self):
+...     return "New hello() called with greeting `" + self.greeting + \
+...         "' and name `" + self.my_name + "'"
+...
+>>> # Изменим статический член класса функцию hello():
+... User.hello = new_hello
+>>> peter.hello()
+"New hello() called with greeting `Hi ' and name `Peter'"
+>>> sam.hello()
+"New hello() called with greeting `Hi ' and name `Sam'"
+>>>

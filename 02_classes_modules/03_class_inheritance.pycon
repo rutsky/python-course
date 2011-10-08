@@ -1,0 +1,23 @@
+>>> # В Python есть множественное наследоваение классов:
+... # class ИмяКласса(ИмяБазовогоКласса1, ИмяБазовогоКласса2, ...):
+... #     выражение1
+... #     выражение2
+... #     ...
+... class UserWithSurname(User): # Наследуем свойства класса User
+...     def __init__(self, name, surname):
+...         # Вызываем конструктор базового класса с необходимыми 
+...         # аргументами
+...         User.__init__(self, name) # он присвоит в self.my_name = name
+...         self.my_surname = surname
+...     def hello(self): # hello() переопределяется
+...         return self.greeting + self.my_name + " " + self.my_surname
+...     def old_hello(self):
+...         # Явно вызываем метод базового класса
+...         return User.hello(self)
+... 
+>>> peter = UserWithSurname("Peter", "Ivanov")
+>>> peter.hello()
+'Hello Peter Ivanov'
+>>> peter.old_hello()
+'Hello Peter'
+>>> 

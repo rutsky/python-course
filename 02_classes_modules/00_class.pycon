@@ -7,11 +7,11 @@
 ...     def f(self):
 ...         return 'Hello!'
 ... 
->>> MyClass # Оператор создаёт новый класс
-<class __main__.MyClass at 0x1c47e88>
+>>> MyClass # Оператор class создал новый класс 
+<class __main__.MyClass at 0x10bce88>
 >>> x = MyClass() # `вызов' класса --- создание экземпляра класса
 >>> x       # - экземпляр (instance) класса MyClass
-<__main__.MyClass instance at 0x1caf7a0>
+<__main__.MyClass instance at 0x11247e8>
 >>> x.f()   # вызываем метод класса
 'Hello!'
 >>> 

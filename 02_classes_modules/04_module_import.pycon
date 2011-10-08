@@ -1,0 +1,7 @@
+>>> import user
+>>> dir(user)
+['User', '__builtins__', '__doc__', '__file__', '__name__', '__package__']
+>>> peter = user.User("Peter")
+>>> peter.hello()
+'Hello Peter'
+>>>
