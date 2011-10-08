@@ -1,0 +1,13 @@
+>>> "Hello, {0}".format("Peter")
+'Hello, Peter'
+>>> "Hello, {0} {1}. Or maybe {1} {0}?".format("John", "Smith")
+'Hello, John Smith. Or maybe Smith John?'
+>>> "Hello, {} {} {}".format(1, 2, 3)
+'Hello, 1 2 3'
+>>> "Object: {0} - size is {size}, weight is {w}".format("potato", size=10, w="0.1 kg")
+'Object: potato - size is 10, weight is 0.1 kg'
+>>> "int: {0:d};  hex: {0:x};  oct: {0:o};  bin: {0:b}".format(30)
+'int: 30;  hex: 1e;  oct: 36;  bin: 11110'
+>>> "{:10.3}".format(3.141592653589793)
+'      3.14'
+>>> 
