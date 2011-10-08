@@ -39,6 +39,7 @@ mkdir downloads
 (or copy it to C:\Python27\Scripts\downloads)
 set PIP_DOWNLOAD_CACHE=downloads
 
+
 C:\Python27\Scripts>easy_install pil
 Searching for pil
 Reading http://pypi.python.org/simple/pil/
@@ -50,4 +51,16 @@ Best match: PIL 1.1.7
 Installed c:\python27\lib\site-packages\pil-1.1.7-py2.7-win32.egg
 Processing dependencies for pil
 Finished processing dependencies for pil
+
+
+Лекция 3:
+Классы
+Модули
+Исключения
+
+Форматированный вывод
+
+Работа со списками
+Работа со словарями
+Итераторы, генераторы
 
