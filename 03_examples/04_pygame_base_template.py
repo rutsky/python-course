@@ -1,45 +1,51 @@
+# -*- encoding: utf-8 -*-
+
 # Sample Python/Pygame Programs
 # Simpson College Computer Science
 # http://cs.simpson.edu
 
 import pygame
 
-# Define some colors
+# Опредилим константы для цветов (модель RGB)
 black    = (   0,   0,   0)
 white    = ( 255, 255, 255)
 green    = (   0, 255,   0)
 red      = ( 255,   0,   0)
 
+# Инициализируем движок pygame
 pygame.init()
  
-# Set the height and width of the screen
-size=[700,500]
-screen=pygame.display.set_mode(size)
+# Инициализируем экран для рисования
+size = [700, 500]
+screen = pygame.display.set_mode(size)
 
+# Установим заголовок окна
 pygame.display.set_caption("My Game")
 
-#Loop until the user clicks the close button.
-done=False
+# Флаг: стоит ли завершить игру
+done = False
 
-# Used to manage how fast the screen updates
-clock=pygame.time.Clock()
+# Создадим таймер для ограничения числа FPS
+clock = pygame.time.Clock()
 
-# -------- Main Program Loop -----------
-while done==False:
-    for event in pygame.event.get(): # User did something
-        if event.type == pygame.QUIT: # If user clicked close
-            done=True # Flag that we are done so we exit this loop
+# ------- главный цикл приложения
+while not done:
+    # Обработаем события (ввод с клавиатуры, мышь и т.п.)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: # пользователь нажал кнопку закрытия окна
+            done = True # завершить главный цикл на следующей итерации
 
-    # Set the screen background
+    # ------- отрисовка
+    # Закрасим экран черным цветом
     screen.fill(black)
+    # ------- конец отрисовки
 
-    # Limit to 20 frames per second
+    # Ограничиваем частоту обновления экрана 20 кадрами в секунду
     clock.tick(20)
 
-    # Go ahead and update the screen with what we've drawn.
+    # Показываем на экран только что нарисованный кадр
     pygame.display.flip()
     
-# Be IDLE friendly. If you forget this line, the program will 'hang'
-# on exit.
-pygame.quit ()
+# Корректно завершим работу
+pygame.quit()
 

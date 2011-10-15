@@ -1,0 +1,135 @@
+bob@acer-6930g:~$ python
+Python 2.7.1+ (r271:86832, Apr 11 2011, 18:13:53) 
+[GCC 4.5.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> class C:
+...     pass
+... 
+>>> c = C()
+>>> c
+<__main__.C instance at 0x1d476c8>
+>>> c.__dict__
+{}
+>>> c.name = "Mickle"
+>>> c.__dict__
+{'name': 'Mickle'}
+>>> c.name
+'Mickle'
+>>> c.__dict__['name']
+'Mickle'
+>>> id(c.__dict__['name'])
+30732480
+>>> id(c.name)
+30732480
+>>> c.__dict__
+{'name': 'Mickle'}
+>>> class C:
+...     def f(self):
+...         print "this is f() with instance", self
+... 
+>>> c = C()
+>>> c.__dict__
+{}
+>>> c.f
+<bound method C.f of <__main__.C instance at 0x1d47830>>
+>>> c.f()
+this is f() with instance <__main__.C instance at 0x1d47830>
+>>> def g(self):
+...     print "this is g with self =", self
+... 
+>>> C.__dict__
+{'__module__': '__main__', '__doc__': None, 'f': <function f at 0x1d498c0>}
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> def f():
+...     print "a"
+... 
+>>> f
+<function f at 0x1d49938>
+>>> dir(f(
+... dir(f(
+KeyboardInterrupt
+>>> dir(f)
+['__call__', '__class__', '__closure__', '__code__', '__defaults__', '__delattr__', '__dict__', '__doc__', '__format__', '__get__', '__getattribute__', '__globals__', '__hash__', '__init__', '__module__', '__name__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'func_closure', 'func_code', 'func_defaults', 'func_dict', 'func_doc', 'func_globals', 'func_name']
+>>> f.__call__()
+a
+>>> f()
+a
+>>> 1
+1
+>>> type(1)
+<type 'int'>
+>>> dir(1)
+['__abs__', '__add__', '__and__', '__class__', '__cmp__', '__coerce__', '__delattr__', '__div__', '__divmod__', '__doc__', '__float__', '__floordiv__', '__format__', '__getattribute__', '__getnewargs__', '__hash__', '__hex__', '__index__', '__init__', '__int__', '__invert__', '__long__', '__lshift__', '__mod__', '__mul__', '__neg__', '__new__', '__nonzero__', '__oct__', '__or__', '__pos__', '__pow__', '__radd__', '__rand__', '__rdiv__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rlshift__', '__rmod__', '__rmul__', '__ror__', '__rpow__', '__rrshift__', '__rshift__', '__rsub__', '__rtruediv__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', '__xor__', 'bit_length', 'conjugate', 'denominator', 'imag', 'numerator', 'real']
+>>> 1.__add__(2)
+  File "<stdin>", line 1
+    1.__add__(2)
+            ^
+SyntaxError: invalid syntax
+>>> class C:
+...     def __add__(self, other):
+...         print "adding ", self, "to", other
+... 
+>>> c = C()
+>>> c + 1
+adding  <__main__.C instance at 0x1d47950> to 1
+>>> c + 
+  File "<stdin>", line 1
+    c + 
+       ^
+SyntaxError: invalid syntax
+>>> 
+>>> c + "asdf"
+adding  <__main__.C instance at 0x1d47950> to asdf
+>>> c.__add__(1)
+adding  <__main__.C instance at 0x1d47950> to 1
+>>> dir(1)
+['__abs__', '__add__', '__and__', '__class__', '__cmp__', '__coerce__', '__delattr__', '__div__', '__divmod__', '__doc__', '__float__', '__floordiv__', '__format__', '__getattribute__', '__getnewargs__', '__hash__', '__hex__', '__index__', '__init__', '__int__', '__invert__', '__long__', '__lshift__', '__mod__', '__mul__', '__neg__', '__new__', '__nonzero__', '__oct__', '__or__', '__pos__', '__pow__', '__radd__', '__rand__', '__rdiv__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rlshift__', '__rmod__', '__rmul__', '__ror__', '__rpow__', '__rrshift__', '__rshift__', '__rsub__', '__rtruediv__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', '__xor__', 'bit_length', 'conjugate', 'denominator', 'imag', 'numerator', 'real']
+>>> 
+>>> import sys
+>>> sys.sleep
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'module' object has no attribute 'sleep'
+>>> 
+>>> range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> xrange(10)
+xrange(10)
+>>> r = xrange(10)
+>>> r
+xrange(10)
+>>> r.next()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'xrange' object has no attribute 'next'
+>>> g = r.__iter__()
+>>> g.next()
+0
+>>> g.next()
+1
+>>> g.next()
+2
+>>> g.next()
+3
+>>> l = range(10000)
+>>> l = range(1000000)
+>>> import os
+>>> os.remove
+<built-in function remove>
+>>> ?os.remove
+  File "<stdin>", line 1
+    ?os.remove
+    ^
+SyntaxError: invalid syntax
+>>> help(os.remove)
+
+>>> 
+>>> os.remove('asdss')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+OSError: [Errno 2] No such file or directory: 'asdss'
+>>> 

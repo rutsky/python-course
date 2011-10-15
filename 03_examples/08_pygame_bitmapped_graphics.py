@@ -39,7 +39,7 @@ player_image.set_colorkey(white)
 done = False
 
 while done==False:
-    clock.tick(10)
+    clock.tick(50)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
