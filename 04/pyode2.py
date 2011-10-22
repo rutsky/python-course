@@ -1,4 +1,5 @@
 # pyODE example 2: Connecting bodies with joints
+# <http://pyode.sourceforge.net/>
 
 import pygame
 from pygame.locals import *

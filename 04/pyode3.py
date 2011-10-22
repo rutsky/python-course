@@ -1,4 +1,5 @@
 # pyODE example 3: Collision detection
+# <http://pyode.sourceforge.net/>
 
 # Originally by Matthias Baas.
 # Updated by Pierre Gay to work without pygame or cgkit.
