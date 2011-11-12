@@ -1,0 +1,6 @@
+>>> while True print "test"
+  File "<stdin>", line 1
+    while True print "test"
+                   ^
+SyntaxError: invalid syntax
+>>>

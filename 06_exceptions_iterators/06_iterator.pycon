@@ -1,0 +1,13 @@
+>>> a = [1, "2", "three"]
+>>> it = iter(a)
+>>> it.next()
+1
+>>> it.next()
+'2'
+>>> it.next()
+'three'
+>>> it.next()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+>>> 

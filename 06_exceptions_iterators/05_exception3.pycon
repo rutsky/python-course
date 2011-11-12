@@ -1,0 +1,17 @@
+>>> try:
+...    # Бросаем исключение стандартного типа (можно любого своего).
+...    raise Exception('spam', 'eggs')
+... except Exception as inst:
+...    print type(inst)     # объект-исключение
+...    print inst.args      # Класс Exception для удобства сохраняет свои 
+...                         # аргументы в .args
+...    print inst           # У Exception переопределён __str__()
+...    x, y = inst          # и адресация __getitem__()
+...    print 'x =', x
+...    print 'y =', y
+...
+<type 'exceptions.Exception'>
+('spam', 'eggs')
+('spam', 'eggs')
+x = spam
+y = eggs

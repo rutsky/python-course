@@ -1,0 +1,16 @@
+>>> class MyError(Exception):
+...     def __init__(self, value):
+...         self.value = value
+...     def __str__(self):
+...         return repr(self.value)
+...
+>>> try:
+...     raise MyError(2*2)
+... except MyError as e:
+...     print 'My exception occurred, value:', e.value
+...
+My exception occurred, value: 4
+>>> raise MyError('oops!')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+__main__.MyError: 'oops!'
