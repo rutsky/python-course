@@ -1,0 +1,184 @@
+Python 2.7.1+ (r271:86832, Apr 11 2011, 18:13:53) 
+[GCC 4.5.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> asfdasdf
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'asfdasdf' is not defined
+>>> try:
+...    asdfasdfsadf
+... except NameError:
+...    print "Name Error!"
+... 
+Name Error!
+>>> import sys
+>>> sys.exc_info()
+(None, None, None)
+>>> asdfasdf
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'asdfasdf' is not defined
+>>> sys.exc_info()
+(None, None, None)
+>>> try:
+...    asdfasdfsadf
+... except NameError:
+...    x = sys.exc_info()
+...    print "xxx"
+... 
+xxx
+>>> x
+(<type 'exceptions.NameError'>, NameError("name 'asdfasdfsadf' is not defined",), <traceback object at 0x24167a0>)
+>>> x
+(<type 'exceptions.NameError'>, NameError("name 'asdfasdfsadf' is not defined",), <traceback object at 0x24167a0>)
+>>> dir(x[1])
+['__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', '__getslice__', '__hash__', '__init__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', 'args', 'message']
+>>> x[1].message
+"name 'asdfasdfsadf' is not defined"
+>>> class Reverse(object):
+...     """Итератор по последовательности в обратном порядке"""
+...     def __init__(self, data):
+...         self.data = data
+...         self.index = len(data)
+...     def __iter__(self):
+...         # Вернём себя в качестве объекта-итератора
+...         return self
+...     def next(self):
+...         if self.index == 0:
+...             raise StopIteration
+...         self.index = self.index - 1
+...         return self.data[self.index]
+... 
+>>> l = range(10)
+>>> l
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> r = Range(l)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'Range' is not defined
+>>> r = Revers(l)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'Revers' is not defined
+>>> r = Reverse(l)
+>>> r
+<__main__.Reverse object at 0x2415e10>
+>>> 
+>>> it = iter(r)
+>>> it.next()
+9
+>>> it.next()
+8
+>>> it.next()
+7
+>>> it.next()
+6
+>>> it is r
+True
+>>> it.next()
+5
+>>> it.next()
+4
+>>> it.next()
+3
+>>> it.next()
+2
+>>> it.next()
+1
+>>> it.next()
+0
+>>> it.next()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 11, in next
+StopIteration
+>>> r1 = Reverse(l)
+>>> for x in r1:
+...     print r1,
+... 
+<__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90> <__main__.Reverse object at 0x2415d90>
+>>> for x in r1:
+... 
+  File "<stdin>", line 2
+    
+    ^
+IndentationError: expected an indented block
+>>> r1 = Reverse(l)
+>>> for x in r1:
+...     print x,
+... 
+9 8 7 6 5 4 3 2 1 0
+>>> 
+>>> def fib():
+...     a, b = 0, 1
+...     while True:
+...         yield b
+...         a, b = b, a + b
+... 
+>>> g = fib()
+>>> g
+<generator object fib at 0x2411aa0>
+>>> dir(g)
+['__class__', '__delattr__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__iter__', '__name__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'close', 'gi_code', 'gi_frame', 'gi_running', 'next', 'send', 'throw']
+>>> g.next()
+1
+>>> g.next()
+1
+>>> g.next()
+2
+>>> g.next()
+3
+>>> g.next()
+5
+>>> g.next()
+8
+>>> def fib2():
+...     print "start"
+...     a, b = 0, 1
+...     while True:
+...         print "going to yield"
+...         yield b
+...         print "yielded!"
+...         a, b = b, a + b
+... 
+>>> g = fib2()
+>>> g.next()
+start
+going to yield
+1
+>>> g.next()
+yielded!
+going to yield
+1
+>>> zip(fib2(), xrange(10))
+start
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+yielded!
+going to yield
+[(1, 0), (1, 1), (2, 2), (3, 3), (5, 4), (8, 5), (13, 6), (21, 7), (34, 8), (55, 9)]
+>>> zip(fib(), xrange(10))
+[(1, 0), (1, 1), (2, 2), (3, 3), (5, 4), (8, 5), (13, 6), (21, 7), (34, 8), (55, 9)]
+>>> 
+>>> def xrange2(*args):
+...     if len(args) == 1:
+...         return range(args[0])
+... 
+>>> 
