@@ -31,3 +31,10 @@
    
    `Скачать презентацию третьей лекции.
    <https://github.com/rutsky/python-course/blob/master/02_classes_modules.pdf?raw=true>`_
+   `Аудиозапись (2:43, OGG, 93 MB). <http://ubuntuone.com/2z7gba5lCObOcqDSKnjo1g>`_
+
+7. Исключения. Оператор with. Итераторы. Генераторы. lambda-функции
+   
+   `Скачать презентацию седьмой лекции.
+   <https://github.com/rutsky/python-course/blob/master/06_exceptions_iterators.pdf?raw=true>`_
+   `Аудиозапись (1:58, OGG, 70 MB). <http://ubuntuone.com/5Kq58YlSYrcxoFqSo2ArMF>`_
