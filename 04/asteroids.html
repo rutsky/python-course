@@ -1,0 +1,704 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #808080 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0040D0 } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span class="c"># -*- encoding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;Игра Астероиды&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">GlobalConstants</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">screen_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">)</span>
+    <span class="n">max_fps</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="k">class</span> <span class="nc">Constants</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">bullet_speed</span> <span class="o">=</span> <span class="mf">250.0</span>
+    <span class="n">bullet_range</span> <span class="o">=</span> <span class="mf">300.0</span>
+    <span class="n">bullet_radius</span> <span class="o">=</span> <span class="mf">3.0</span>
+
+    <span class="n">ship_radius</span> <span class="o">=</span> <span class="mf">10.0</span>
+    <span class="c"># Скорость поворота, радианы/c.</span>
+    <span class="n">ship_rotation_speed</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">2.0</span>
+    <span class="c"># Ускорение корабля, пикселы/с^2.</span>
+    <span class="n">ship_accel</span> <span class="o">=</span> <span class="mi">50</span>
+
+    <span class="n">asteroids_num</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">asteroid_max_start_speed</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">asteroid_min_mass</span> <span class="o">=</span> <span class="mf">500.0</span>
+    <span class="n">asteroid_min_start_size</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">asteroid_max_start_size</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">asteroid_mass_division_coef</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="n">asteroid_explode_min_coef</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">asteroid_explode_max_coef</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">black</span>    <span class="o">=</span> <span class="p">(</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">)</span>
+    <span class="n">white</span>    <span class="o">=</span> <span class="p">(</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+    <span class="n">blue</span>     <span class="o">=</span> <span class="p">(</span>  <span class="mi">50</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+    <span class="n">green</span>    <span class="o">=</span> <span class="p">(</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span>   <span class="mi">0</span><span class="p">)</span>
+    <span class="n">dkgreen</span>  <span class="o">=</span> <span class="p">(</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span>   <span class="mi">0</span><span class="p">)</span>
+    <span class="n">red</span>      <span class="o">=</span> <span class="p">(</span> <span class="mi">255</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">)</span>
+    <span class="n">purple</span>   <span class="o">=</span> <span class="p">(</span><span class="mh">0xBF</span><span class="p">,</span><span class="mh">0x0F</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">)</span>
+    <span class="n">brown</span>    <span class="o">=</span> <span class="p">(</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x00</span><span class="p">)</span>
+    <span class="n">yellow</span>   <span class="o">=</span> <span class="p">(</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span>   <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">background</span> <span class="o">=</span> <span class="n">black</span>
+    <span class="n">ship_in_game</span> <span class="o">=</span> <span class="n">red</span>
+    <span class="n">ship_waiting</span> <span class="o">=</span> <span class="n">green</span>
+    <span class="n">bullet</span> <span class="o">=</span> <span class="n">yellow</span>
+    <span class="n">asteroid</span> <span class="o">=</span> <span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Vector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Вектор&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Vector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращает строку --- внутреннее представление объекта.</span>
+<span class="sd">        Нужно, чтобы в интерактивном режиме вектора показывались как </span>
+<span class="sd">            Vector(0, 0)</span>
+<span class="sd">        а не</span>
+<span class="sd">            &lt;asteroids.Vector instance at 0x2434bd8&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;Vector({x},{y})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Сложение векторов: v1 + v2&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">vec</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">vec</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Вычитание векторов: v1 - v2&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">vec</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">vec</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Умножение вектора на число: v * c&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Умножение числа на вектор: c * v&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="n">scalar</span>
+
+    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Деление вектора на число: v / c&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">scalar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">scalar</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Покоординатное целочисленное деление: v1 % v2&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">%</span> <span class="n">vec</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">%</span> <span class="n">vec</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Скалярное произведение: v1 &amp; v2&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">vec</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">vec</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Унарный минус: -v&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rotated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращает результат поворота вектора на угол angle (в радианах)</span>
+<span class="sd">        против часовой стрелки &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rounded_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Округляет координаты и возвращает их в виде кортежа</span>
+<span class="sd">        </span>
+<span class="sd">        Для передачи в функции рисования pygame.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращает длину вектора&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="k">def</span> <span class="nf">normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращает нормализованный вектор&quot;&quot;&quot;</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">/</span> <span class="n">length</span>
+
+<span class="k">class</span> <span class="nc">BaseCircleObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Базовый класс для объектов сцены, аппроксимируемых окружностью&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BaseCircleObject</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+
+    <span class="k">def</span> <span class="nf">round_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Переводит позицию в прямоугольник экрана</span>
+<span class="sd">        </span>
+<span class="sd">        (При движении объекты могут уходить за край экрана, при этом они</span>
+<span class="sd">        должны появиться с другой стороны экрана.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> \
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">%</span> <span class="n">screen_size</span> <span class="o">+</span> <span class="n">screen_size</span><span class="p">)</span> <span class="o">%</span> <span class="n">screen_size</span>
+
+    <span class="k">def</span> <span class="nf">update_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_size</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Пересчитывает где будет объект через dt секунд&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">round_position</span><span class="p">(</span><span class="n">screen_size</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Asteroid</span><span class="p">(</span><span class="n">BaseCircleObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Астероид&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Asteroid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">mass</span>
+
+<span class="k">class</span> <span class="nc">Ship</span><span class="p">(</span><span class="n">BaseCircleObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Корабль&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Ship</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">create_bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Создаёт пулю на носу корабля, со скоростью по ориентации корабля&quot;&quot;&quot;</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="n">Constants</span><span class="o">.</span><span class="n">ship_radius</span>
+        <span class="n">time_to_live</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">bullet_range</span> <span class="o">/</span> <span class="n">Constants</span><span class="o">.</span><span class="n">bullet_speed</span>
+        <span class="n">bullet</span> <span class="o">=</span> <span class="n">Bullet</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="n">Constants</span><span class="o">.</span><span class="n">bullet_speed</span><span class="p">,</span> 
+            <span class="n">Constants</span><span class="o">.</span><span class="n">bullet_radius</span><span class="p">,</span> <span class="n">time_to_live</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bullet</span>
+
+    <span class="k">def</span> <span class="nf">rotate_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Поворот корабля влево&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">-=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Constants</span><span class="o">.</span><span class="n">ship_rotation_speed</span>
+
+    <span class="k">def</span> <span class="nf">rotate_right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Поворот корабля вправо&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Constants</span><span class="o">.</span><span class="n">ship_rotation_speed</span>
+
+    <span class="k">def</span> <span class="nf">accelerate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ускорение корабля&quot;&quot;&quot;</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Constants</span><span class="o">.</span><span class="n">ship_accel</span> <span class="o">*</span> <span class="n">direction</span>
+
+<span class="k">class</span> <span class="nc">Bullet</span><span class="p">(</span><span class="n">BaseCircleObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Пуля&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">time_to_live</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bullet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">birth_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_to_live</span> <span class="o">=</span> <span class="n">time_to_live</span>
+
+    <span class="k">def</span> <span class="nf">is_time_exceeded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращает истекло ли время жизни пули&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">birth_time</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_to_live</span>
+
+<span class="k">class</span> <span class="nc">Scene</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Сцена</span>
+<span class="sd">    </span>
+<span class="sd">    Хранит рисуемые и обрабатываемые объекты.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Scene</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c"># Списки для астероидов и пуль.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">asteroids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># Создаём корабль.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship</span> <span class="o">=</span> <span class="n">Ship</span><span class="p">(</span><span class="n">screen_size</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Constants</span><span class="o">.</span><span class="n">ship_radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="c"># Создаём астероиды.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Constants</span><span class="o">.</span><span class="n">asteroids_num</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                         <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">max_speed</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_max_start_speed</span>
+            <span class="n">vel</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">max_speed</span><span class="p">,</span> <span class="n">max_speed</span><span class="p">),</span>
+                         <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">max_speed</span><span class="p">,</span> <span class="n">max_speed</span><span class="p">))</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            <span class="n">radius</span> <span class="o">=</span> <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_min_start_size</span> <span class="o">+</span> \
+                <span class="n">size</span> <span class="o">*</span> <span class="p">(</span><span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_max_start_size</span> <span class="o">-</span> 
+                        <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_min_start_size</span><span class="p">)</span>
+            <span class="n">mass</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">radius</span><span class="o">**</span><span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asteroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Asteroid</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">draw_asteroid</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">asteroid</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Рисуем астероид на surface в позиции position&quot;&quot;&quot;</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">asteroid</span><span class="p">,</span> 
+        <span class="n">position</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> 
+        <span class="nb">int</span><span class="p">(</span><span class="n">asteroid</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_bullet</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">bullet</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Рисуем пулю на surface в позиции position&quot;&quot;&quot;</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">bullet</span><span class="p">,</span> 
+        <span class="n">position</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> 
+        <span class="nb">int</span><span class="p">(</span><span class="n">bullet</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_ship_in_game</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">ship</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Рисуем корабль в состоянии IN_GAME на surface в позиции position&quot;&quot;&quot;</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> \
+        <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">+</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> \
+        <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">-</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">polygon</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">ship_in_game</span><span class="p">,</span> 
+        <span class="p">[</span><span class="n">top</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> <span class="n">left</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> <span class="n">right</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">()],</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_ship_waiting_start</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">ship</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Рисуем корабль в состоянии WAITING_START на surface в позиции position&quot;&quot;&quot;</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> \
+        <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">+</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> \
+        <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ship</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">-</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">polygon</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">ship_waiting</span><span class="p">,</span> 
+        <span class="p">[</span><span class="n">top</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> <span class="n">left</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">(),</span> <span class="n">right</span><span class="o">.</span><span class="n">rounded_tuple</span><span class="p">()],</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_with_duplicates</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">screen_size</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">draw_func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Вызываем функцию рисования для 9 смещений, чтобы нарисовать все выходы</span>
+<span class="sd">    за границы экрана&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">BaseCircleObject</span><span class="p">)</span>
+    <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">y</span>
+    <span class="k">for</span> <span class="n">dx</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">dy</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="n">draw_func</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">closest_vector</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Возвращает радиус-вектор из первой точки во вторую в mod N</span>
+<span class="sd">    пространстве&quot;&quot;&quot;</span>
+    <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">ends</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pos2</span> <span class="o">+</span> <span class="n">Vector</span><span class="p">(</span><span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">))</span> <span class="k">for</span> <span class="n">dy</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> 
+                                                  <span class="k">for</span> <span class="n">dx</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+    <span class="n">closest_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ends</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">end</span><span class="p">:</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">pos1</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">closest_end</span> <span class="o">-</span> <span class="n">pos1</span>
+
+<span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Возвращает расстояние между точками в mod N пространстве&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">closest_vector</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">is_collides</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Проверяет, сталкиваются ли два объекта-окружности&quot;&quot;&quot;</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">obj1</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">obj2</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">obj1</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">obj2</span><span class="o">.</span><span class="n">radius</span>
+
+<span class="k">def</span> <span class="nf">collide_asteroids</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">asteroid1</span><span class="p">,</span> <span class="n">asteroid2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Сталкивает два астероида&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_collides</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">asteroid1</span><span class="p">,</span> <span class="n">asteroid2</span><span class="p">):</span>
+        <span class="n">closest_vec</span> <span class="o">=</span> <span class="n">closest_vector</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> 
+            <span class="n">asteroid1</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="c"># Столкновение.</span>
+        <span class="n">vel1_local</span> <span class="o">=</span> <span class="n">asteroid1</span><span class="o">.</span><span class="n">velocity</span> <span class="o">-</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="k">if</span> <span class="n">vel1_local</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="c"># Астероиды двигаются параллельно.</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">closest_vec</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="c"># Астероиды в одной точке, пропустим этот случай (TODO).</span>
+            <span class="k">return</span>
+
+        <span class="n">collision_vec</span> <span class="o">=</span> <span class="n">closest_vec</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>        
+        <span class="n">vel1_x_local</span> <span class="o">=</span> <span class="p">(</span><span class="n">vel1_local</span> <span class="o">&amp;</span> <span class="n">collision_vec</span><span class="p">)</span> <span class="o">*</span> <span class="n">collision_vec</span>
+        <span class="n">vel1_y_local</span> <span class="o">=</span> <span class="n">vel1_local</span> <span class="o">-</span> <span class="n">vel1_x_local</span>
+
+        <span class="n">mass_sum</span> <span class="o">=</span> <span class="n">asteroid1</span><span class="o">.</span><span class="n">mass</span> <span class="o">+</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">mass</span>
+        <span class="n">res_vel1_x_local</span> <span class="o">=</span> \
+            <span class="p">(</span><span class="n">asteroid1</span><span class="o">.</span><span class="n">mass</span> <span class="o">-</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span> <span class="o">/</span> <span class="n">mass_sum</span> <span class="o">*</span> <span class="n">vel1_x_local</span>
+        <span class="n">res_vel1_y_local</span> <span class="o">=</span> <span class="n">vel1_y_local</span>
+        <span class="n">res_vel1_local</span> <span class="o">=</span> <span class="n">res_vel1_x_local</span> <span class="o">+</span> <span class="n">res_vel1_y_local</span>
+
+        <span class="n">res_vel2_local</span> <span class="o">=</span> \
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">asteroid1</span><span class="o">.</span><span class="n">mass</span> <span class="o">/</span> <span class="n">mass_sum</span> <span class="o">*</span> <span class="n">vel1_x_local</span>
+
+        <span class="n">res_vel1</span> <span class="o">=</span> <span class="n">res_vel1_local</span> <span class="o">+</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="n">res_vel2</span> <span class="o">=</span> <span class="n">res_vel2_local</span> <span class="o">+</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">velocity</span>
+
+        <span class="n">asteroid1</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">res_vel1</span>
+        <span class="n">asteroid2</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">res_vel2</span>
+
+        <span class="c"># Сдвигаем астероиды так, чтобы их окружности больше не пересекались.</span>
+        <span class="n">inters_dist</span> <span class="o">=</span> <span class="n">asteroid1</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">asteroid2</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="n">closest_vec</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+        <span class="n">asteroid1</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="o">-</span><span class="n">collision_vec</span> <span class="o">*</span> <span class="p">(</span><span class="n">inters_dist</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">asteroid1</span><span class="o">.</span><span class="n">round_position</span><span class="p">(</span><span class="n">screen_size</span><span class="p">)</span>
+        <span class="n">asteroid2</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span>  <span class="n">collision_vec</span> <span class="o">*</span> <span class="p">(</span><span class="n">inters_dist</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">asteroid2</span><span class="o">.</span><span class="n">round_position</span><span class="p">(</span><span class="n">screen_size</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">explode_asteroid</span><span class="p">(</span><span class="n">screen_size</span><span class="p">,</span> <span class="n">asteroid</span><span class="p">,</span> <span class="n">bullet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Создаём новые астероиды меньшего размера на месте взорвавшегося </span>
+<span class="sd">    старого</span>
+<span class="sd">    </span>
+<span class="sd">    Возвращаем список из созданных новых маленьких астероидов.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">mass</span> <span class="o">&lt;</span> <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_min_mass</span><span class="p">:</span>
+        <span class="c"># Слишком маленький астероид --- полностью уничтожаем.</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Делим астероид на два меньших размером.</span>
+        <span class="n">mass</span> <span class="o">=</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">mass</span> <span class="o">/</span> <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_mass_division_coef</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="p">(</span><span class="n">mass</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+        <span class="n">part1_dir</span> <span class="o">=</span> <span class="n">bullet</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">part2_dir</span> <span class="o">=</span> <span class="n">bullet</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="n">vel_factor</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+            <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_explode_min_coef</span><span class="p">,</span>
+            <span class="n">Constants</span><span class="o">.</span><span class="n">asteroid_explode_max_coef</span><span class="p">)</span>
+        <span class="n">vel1</span> <span class="o">=</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">velocity</span> <span class="o">+</span> <span class="n">part1_dir</span> <span class="o">*</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">*</span> \
+            <span class="n">vel_factor</span>
+        <span class="n">vel2</span> <span class="o">=</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">velocity</span> <span class="o">+</span> <span class="n">part2_dir</span> <span class="o">*</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span> <span class="o">*</span> \
+            <span class="n">vel_factor</span>
+
+        <span class="n">pos1</span> <span class="o">=</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">part1_dir</span> <span class="o">*</span> <span class="n">radius</span>
+        <span class="n">pos2</span> <span class="o">=</span> <span class="n">asteroid</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">part2_dir</span> <span class="o">*</span> <span class="n">radius</span>
+
+        <span class="n">asteroid1</span> <span class="o">=</span> <span class="n">Asteroid</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">vel1</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">)</span>
+        <span class="n">asteroid2</span> <span class="o">=</span> <span class="n">Asteroid</span><span class="p">(</span><span class="n">pos2</span><span class="p">,</span> <span class="n">vel2</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">asteroid1</span><span class="p">,</span> <span class="n">asteroid2</span><span class="p">]</span>
+        
+<span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Перечисление состояний игры&quot;&quot;&quot;</span>
+
+    <span class="n">WAITING_START</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># Ожидаем, пока пользователь нажмёт пробел и корабль </span>
+                      <span class="c"># войдёт в игру.</span>
+    <span class="n">IN_GAME</span>       <span class="o">=</span> <span class="mi">1</span> <span class="c"># Корабль в игре.</span>
+
+<span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Игра&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Game</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">screen_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">screen_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">WAITING_START</span>
+
+        <span class="c"># Словарь { кнопка: нажата ли }.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys_state</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Отрисовка сцены&quot;&quot;&quot;</span>
+
+        <span class="c"># Отрисуем фон.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_background</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="c"># Отрисуем астероиды.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_asteroids</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="c"># Отрисуем пули.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_bullets</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">WAITING_START</span><span class="p">:</span>
+            <span class="c"># Рисуем корабль не активным, т.к. игра ещё не начата.</span>
+            <span class="n">draw_with_duplicates</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="p">,</span> <span class="n">draw_ship_waiting_start</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Рисуем корабль.</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">IN_GAME</span>
+            <span class="n">draw_with_duplicates</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="p">,</span> <span class="n">draw_ship_in_game</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновляем состояние игры на время dt.</span>
+<span class="sd">        </span>
+<span class="sd">        Возвращает:</span>
+<span class="sd">          True, если игра продолжается, </span>
+<span class="sd">          False, если игру необходимо завершить.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Список произошедших внешних событий.</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+        <span class="c"># Обработка общих событий для всех состояний игры.</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span> <span class="ow">or</span>
+                  <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span> <span class="ow">and</span> 
+                   <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_ESCAPE</span><span class="p">)):</span>
+                <span class="c"># Нажат крест на окне или Escape.</span>
+                <span class="c"># Прерываем обновление и возвращаем флаг, что необходимо </span>
+                <span class="c"># завершить программу</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+            <span class="c"># Обрабатываем события нажатия/отжатия кнопок, чтобы всегда иметь</span>
+            <span class="c"># общее состояние клавиатуры.</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_keys_state</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYUP</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_keys_state</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c"># Общая для всех состояний логика: обновить положения астероидов,</span>
+        <span class="c"># обновить положения пуль.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_move_asteroids</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collide_asteroids</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_move_bullets</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_bullets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collide_bullets_with_asteroids</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_ship_orientation</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+
+        <span class="c"># Вызываем функцию обновления, соответствующую состоянию игры.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">WAITING_START</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_waiting_start</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">events</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">IN_GAME</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_in_game</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">events</span><span class="p">)</span>
+
+        <span class="c"># Возвращаем флаг, что игру необходимо продолжать</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">_is_key_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Возвращаем состояние кнопки&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys_state</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_change_state_to_in_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Функция перехода из состояния AWAITING_START в IN_GAME&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">IN_GAME</span>
+
+    <span class="k">def</span> <span class="nf">_change_state_to_waiting_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Функция перехода из состояния IN_GAME в AWAITING_START&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">WAITING_START</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_waiting_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновление сцены и обработка событий на следующие dt секунд для</span>
+<span class="sd">        состояния, когда игра ещё не началась</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span> <span class="ow">and</span>
+                    <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">):</span>
+                <span class="c"># Нажат пробел --- переходим в состояние игры.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_state_to_in_game</span><span class="p">()</span>
+                <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_update_in_game</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновление сцены и обработка событий на следующие dt секунд для</span>
+<span class="sd">        состояния, когда игра идёт</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+                    <span class="c"># Был нажат пробел --- стреляем.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">create_bullet</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_ship_acceleration</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_move_ship</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collide_asteroids_with_ship</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_move_ship</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновляем положение корабля&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">update_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_ship_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обработка нажатия кнопок для поворота корабля&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">):</span>
+            <span class="c"># Поворачиваем корабль влево.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rotate_left</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">):</span>
+            <span class="c"># Поворачиваем корабль вправо.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rotate_right</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_ship_acceleration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обработка нажатия кнопок для ускорения корабля&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_UP</span><span class="p">):</span>
+            <span class="c"># Ускориться.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">accelerate</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_move_asteroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновляем положения астероидов&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">asteroid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">:</span>
+            <span class="n">asteroid</span><span class="o">.</span><span class="n">update_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_collide_asteroids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Сталкиваем астероиды друг с другом&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">asteroid1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">asteroid2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">collide_asteroids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">asteroid1</span><span class="p">,</span> <span class="n">asteroid2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_move_bullets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Обновляем положение пуль&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="p">:</span>
+            <span class="n">bullet</span><span class="o">.</span><span class="n">update_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_bullets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Удаляем пули, чье время жизни истекло&quot;&quot;&quot;</span>
+
+        <span class="c"># Функция filter(func, iter) проходит по всем элементам iter и </span>
+        <span class="c"># записывает в результирующий список лишь те элементы, для которых </span>
+        <span class="c"># func вернёт True.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">bullet</span><span class="p">:</span> <span class="ow">not</span> <span class="n">bullet</span><span class="o">.</span><span class="n">is_time_exceeded</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_collide_bullets_with_asteroids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Сталкиваем пули и астероиды&quot;&quot;&quot;</span>
+        <span class="n">new_asteroids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">asteroid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">is_collides</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">asteroid</span><span class="p">,</span> <span class="n">bullet</span><span class="p">):</span>
+                    <span class="n">new_asteroids</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="n">explode_asteroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> 
+                            <span class="n">asteroid</span><span class="p">,</span> <span class="n">bullet</span><span class="p">))</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_asteroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">asteroid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span> <span class="o">=</span> <span class="n">new_asteroids</span>
+
+    <span class="k">def</span> <span class="nf">_collide_asteroids_with_ship</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Проверяем, не столкнулися ли корабль с астероидом&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">asteroid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_collides</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">asteroid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">ship</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_state_to_waiting_start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_draw_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Рисует задний фон&quot;&quot;&quot;</span>
+        <span class="c"># Заполним фон белым цветом.</span>
+        <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_draw_asteroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Рисует все астероиды на сцене&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">asteroid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">asteroids</span><span class="p">:</span>
+            <span class="n">draw_with_duplicates</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> 
+                <span class="n">asteroid</span><span class="p">,</span> <span class="n">draw_asteroid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_draw_bullets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Рисует все пули на сцене&quot;&quot;&quot;</span>
+        
+        <span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="o">.</span><span class="n">bullets</span><span class="p">:</span>
+            <span class="n">draw_with_duplicates</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen_size</span><span class="p">,</span> <span class="n">bullet</span><span class="p">,</span> <span class="n">draw_bullet</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main_impl</span><span class="p">():</span>
+    <span class="c"># Устанавливаем заголовок окна.</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s">&#39;Астероиды&#39;</span><span class="p">)</span>
+
+    <span class="c"># Создаём таймер.</span>
+    <span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+    <span class="c"># Создаём окно для рисования.</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="n">GlobalConstants</span><span class="o">.</span><span class="n">screen_size</span><span class="p">)</span>
+
+    <span class="c"># Создаёт объект-игру.</span>
+    <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span><span class="p">(</span><span class="n">GlobalConstants</span><span class="o">.</span><span class="n">screen_size</span><span class="p">)</span>
+
+    <span class="c"># Инициализируем шаг обновления.</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">GlobalConstants</span><span class="o">.</span><span class="n">max_fps</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="c"># Игра отрисовывает себя.</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="c"># Результат рисования копируется на физический дисплей.</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+        <span class="c"># Подготовка состояния игры для времени через dt.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">game</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+            <span class="c"># Выходим из игры.</span>
+            <span class="k">break</span>
+
+        <span class="c"># Устанавливаем шаг обновления в количество секунд,</span>
+        <span class="c"># прошедших с предыдущего вызова clock.tick().</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">GlobalConstants</span><span class="o">.</span><span class="n">max_fps</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c"># Инициализируем библиотеку PyGame.</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">main_impl</span><span class="p">()</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c"># Всегда деинициализируем библиотеку PyGame, даже в случае падения.</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</body>
+</html>

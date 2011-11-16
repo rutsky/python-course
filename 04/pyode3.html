@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #808080 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0040D0 } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span class="c"># pyODE example 3: Collision detection</span>
+<span class="c"># &lt;http://pyode.sourceforge.net/&gt;</span>
+
+<span class="c"># Originally by Matthias Baas.</span>
+<span class="c"># Updated by Pierre Gay to work without pygame or cgkit.</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">OpenGL.GL</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">OpenGL.GLU</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">OpenGL.GLUT</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">ode</span>
+
+<span class="c"># geometric utility functions</span>
+<span class="k">def</span> <span class="nf">scalp</span> <span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">scal</span><span class="p">):</span>
+    <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scal</span>
+    <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scal</span>
+    <span class="n">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scal</span>
+
+<span class="k">def</span> <span class="nf">length</span> <span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sqrt</span> <span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># prepare_GL</span>
+<span class="k">def</span> <span class="nf">prepare_GL</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Prepare drawing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Viewport</span>
+    <span class="n">glViewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">640</span><span class="p">,</span><span class="mi">480</span><span class="p">)</span>
+
+    <span class="c"># Initialize</span>
+    <span class="n">glClearColor</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.9</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span><span class="p">);</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">)</span>
+    <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_LIGHTING</span><span class="p">)</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_LIGHTING</span><span class="p">)</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_NORMALIZE</span><span class="p">)</span>
+    <span class="n">glShadeModel</span><span class="p">(</span><span class="n">GL_FLAT</span><span class="p">)</span>
+
+    <span class="c"># Projection</span>
+    <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_PROJECTION</span><span class="p">)</span>
+    <span class="n">glLoadIdentity</span><span class="p">()</span>
+    <span class="n">gluPerspective</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mf">1.3333</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="c"># Initialize ModelView matrix</span>
+    <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_MODELVIEW</span><span class="p">)</span>
+    <span class="n">glLoadIdentity</span><span class="p">()</span>
+
+    <span class="c"># Light source</span>
+    <span class="n">glLightfv</span><span class="p">(</span><span class="n">GL_LIGHT0</span><span class="p">,</span><span class="n">GL_POSITION</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">glLightfv</span><span class="p">(</span><span class="n">GL_LIGHT0</span><span class="p">,</span><span class="n">GL_DIFFUSE</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">glLightfv</span><span class="p">(</span><span class="n">GL_LIGHT0</span><span class="p">,</span><span class="n">GL_SPECULAR</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_LIGHT0</span><span class="p">)</span>
+
+    <span class="c"># View transformation</span>
+    <span class="n">gluLookAt</span> <span class="p">(</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c"># draw_body</span>
+<span class="k">def</span> <span class="nf">draw_body</span><span class="p">(</span><span class="n">body</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw an ODE body.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">getRotation</span><span class="p">()</span>
+    <span class="n">rot</span> <span class="o">=</span> <span class="p">[</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span>
+           <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span>
+           <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span>
+           <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+    <span class="n">glPushMatrix</span><span class="p">()</span>
+    <span class="n">glMultMatrixd</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="s">&quot;box&quot;</span><span class="p">:</span>
+        <span class="n">sx</span><span class="p">,</span><span class="n">sy</span><span class="p">,</span><span class="n">sz</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">boxsize</span>
+        <span class="n">glScalef</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">)</span>
+        <span class="n">glutSolidCube</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">glPopMatrix</span><span class="p">()</span>
+
+
+<span class="c"># create_box</span>
+<span class="k">def</span> <span class="nf">create_box</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a box body and its corresponding geom.&quot;&quot;&quot;</span>
+
+    <span class="c"># Create body</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">Body</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">Mass</span><span class="p">()</span>
+    <span class="n">M</span><span class="o">.</span><span class="n">setBox</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">setMass</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+    <span class="c"># Set parameters for drawing the body</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s">&quot;box&quot;</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">boxsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">)</span>
+
+    <span class="c"># Create a box geom for collision detection</span>
+    <span class="n">geom</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">GeomBox</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="n">body</span><span class="o">.</span><span class="n">boxsize</span><span class="p">)</span>
+    <span class="n">geom</span><span class="o">.</span><span class="n">setBody</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">body</span><span class="p">,</span> <span class="n">geom</span>
+
+<span class="c"># drop_object</span>
+<span class="k">def</span> <span class="nf">drop_object</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Drop an object into the scene.&quot;&quot;&quot;</span>
+
+    <span class="k">global</span> <span class="n">bodies</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="n">objcount</span>
+
+    <span class="n">body</span><span class="p">,</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">create_box</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">setPosition</span><span class="p">(</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span><span class="mf">3.0</span><span class="p">,</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">))</span> <span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">cos</span> <span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">sin</span> <span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">setRotation</span><span class="p">([</span><span class="n">ct</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">st</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">ct</span><span class="p">])</span>
+    <span class="n">bodies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">geoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+    <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">objcount</span><span class="o">+=</span><span class="mi">1</span>
+
+<span class="c"># explosion</span>
+<span class="k">def</span> <span class="nf">explosion</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Simulate an explosion.</span>
+
+<span class="sd">    Every object is pushed away from the origin.</span>
+<span class="sd">    The force is dependent on the objects distance from the origin.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">bodies</span>
+
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bodies</span><span class="p">:</span>
+        <span class="n">l</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">getPosition</span> <span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">length</span> <span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40000</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">0.2</span><span class="o">*</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">))</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">scalp</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">a</span> <span class="o">/</span> <span class="n">length</span> <span class="p">(</span><span class="n">l</span><span class="p">))</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">addForce</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+<span class="c"># pull</span>
+<span class="k">def</span> <span class="nf">pull</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Pull the objects back to the origin.</span>
+
+<span class="sd">    Every object will be pulled back to the origin.</span>
+<span class="sd">    Every couple of frames there&#39;ll be a thrust upwards so that</span>
+<span class="sd">    the objects won&#39;t stick to the ground all the time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">bodies</span><span class="p">,</span> <span class="n">counter</span>
+
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bodies</span><span class="p">:</span>
+        <span class="n">l</span><span class="o">=</span><span class="nb">list</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">getPosition</span> <span class="p">())</span>
+        <span class="n">scalp</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span> <span class="o">/</span> <span class="n">length</span> <span class="p">(</span><span class="n">l</span><span class="p">))</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">addForce</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">%</span><span class="mi">60</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">addForce</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c"># Collision callback</span>
+<span class="k">def</span> <span class="nf">near_callback</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">geom1</span><span class="p">,</span> <span class="n">geom2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Callback function for the collide() method.</span>
+
+<span class="sd">    This function checks if the given geoms do collide and</span>
+<span class="sd">    creates contact joints if they do.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Check if the objects do collide</span>
+    <span class="n">contacts</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">geom1</span><span class="p">,</span> <span class="n">geom2</span><span class="p">)</span>
+
+    <span class="c"># Create contact joints</span>
+    <span class="n">world</span><span class="p">,</span><span class="n">contactgroup</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contacts</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">setBounce</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">setMu</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">ContactJoint</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">contactgroup</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="n">j</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">geom1</span><span class="o">.</span><span class="n">getBody</span><span class="p">(),</span> <span class="n">geom2</span><span class="o">.</span><span class="n">getBody</span><span class="p">())</span>
+
+
+
+<span class="c">######################################################################</span>
+
+<span class="c"># Initialize Glut</span>
+<span class="n">glutInit</span> <span class="p">([])</span>
+
+<span class="c"># Open a window</span>
+<span class="n">glutInitDisplayMode</span> <span class="p">(</span><span class="n">GLUT_RGB</span> <span class="o">|</span> <span class="n">GLUT_DOUBLE</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">640</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mi">480</span>
+<span class="n">glutInitWindowPosition</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+<span class="n">glutInitWindowSize</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+<span class="n">glutCreateWindow</span> <span class="p">(</span><span class="s">&quot;testode&quot;</span><span class="p">)</span>
+
+<span class="c"># Create a world object</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="n">world</span><span class="o">.</span><span class="n">setGravity</span><span class="p">(</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">9.81</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">setERP</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">setCFM</span><span class="p">(</span><span class="mf">1E-5</span><span class="p">)</span>
+
+<span class="c"># Create a space object</span>
+<span class="n">space</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">Space</span><span class="p">()</span>
+
+<span class="c"># Create a plane geom which prevent the objects from falling forever</span>
+<span class="n">floor</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">GeomPlane</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c"># A list with ODE bodies</span>
+<span class="n">bodies</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># The geoms for each of the bodies</span>
+<span class="n">geoms</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># A joint group for the contact joints that are generated whenever</span>
+<span class="c"># two bodies collide</span>
+<span class="n">contactgroup</span> <span class="o">=</span> <span class="n">ode</span><span class="o">.</span><span class="n">JointGroup</span><span class="p">()</span>
+
+<span class="c"># Some variables used inside the simulation loop</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">fps</span>
+<span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">objcount</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">lasttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+
+<span class="c"># keyboard callback</span>
+<span class="k">def</span> <span class="nf">_keyfunc</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">glutKeyboardFunc</span> <span class="p">(</span><span class="n">_keyfunc</span><span class="p">)</span>
+
+<span class="c"># draw callback</span>
+<span class="k">def</span> <span class="nf">_drawfunc</span> <span class="p">():</span>
+    <span class="c"># Draw the scene</span>
+    <span class="n">prepare_GL</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bodies</span><span class="p">:</span>
+        <span class="n">draw_body</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="n">glutSwapBuffers</span> <span class="p">()</span>
+
+<span class="n">glutDisplayFunc</span> <span class="p">(</span><span class="n">_drawfunc</span><span class="p">)</span>
+
+<span class="c"># idle callback</span>
+<span class="k">def</span> <span class="nf">_idlefunc</span> <span class="p">():</span>
+    <span class="k">global</span> <span class="n">counter</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">lasttime</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">lasttime</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">state</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">==</span><span class="mi">20</span><span class="p">:</span>
+            <span class="n">drop_object</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">objcount</span><span class="o">==</span><span class="mi">30</span><span class="p">:</span>
+            <span class="n">state</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+    <span class="c"># State 1: Explosion and pulling back the objects</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">==</span><span class="mi">100</span><span class="p">:</span>
+            <span class="n">explosion</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">&gt;</span><span class="mi">300</span><span class="p">:</span>
+            <span class="n">pull</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">counter</span><span class="o">==</span><span class="mi">500</span><span class="p">:</span>
+            <span class="n">counter</span><span class="o">=</span><span class="mi">20</span>
+
+    <span class="n">glutPostRedisplay</span> <span class="p">()</span>
+
+    <span class="c"># Simulate</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="c"># Detect collisions and create contact joints</span>
+        <span class="n">space</span><span class="o">.</span><span class="n">collide</span><span class="p">((</span><span class="n">world</span><span class="p">,</span><span class="n">contactgroup</span><span class="p">),</span> <span class="n">near_callback</span><span class="p">)</span>
+
+        <span class="c"># Simulation step</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c"># Remove all contact joints</span>
+        <span class="n">contactgroup</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+
+    <span class="n">lasttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">glutIdleFunc</span> <span class="p">(</span><span class="n">_idlefunc</span><span class="p">)</span>
+
+<span class="n">glutMainLoop</span> <span class="p">()</span>
+</pre></div>
+</body>
+</html>
