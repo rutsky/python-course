@@ -22,6 +22,9 @@ class Vector(object):
         """
         return "Vector({x},{y})".format(x=self.x, y=self.y)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
     def __add__(self, vec):
         """Сложение векторов: v1 + v2"""
         assert isinstance(vec, Vector)
