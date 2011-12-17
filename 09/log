@@ -1,0 +1,173 @@
+bob@acer-6930g:~/public/python-course$ ipython
+Python 2.7.1+ (r271:86832, Apr 11 2011, 18:13:53) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 0.10.1 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object'. ?object also works, ?? prints more.
+
+In [1]: a = 2
+
+In [2]: for i in range(10):
+   ...:     print i
+   ...:     
+   ...:     
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+In [3]: help(len)
+
+
+In [4]: len?
+Type:		builtin_function_or_method
+Base Class:	<type 'builtin_function_or_method'>
+String Form:	<built-in function len>
+Namespace:	Python builtin
+Docstring:
+    len(object) -> integer
+    
+    Return the number of items of a sequence or mapping.
+
+
+In [5]: le
+len   less  
+
+In [5]: len(
+Display all 216 possibilities? (y or n)
+ArithmeticError            _ih                        intern
+AssertionError             _ii                        ip_set_hook
+AttributeError             _iii                       ipalias
+BaseException              _ip                        ipmagic
+BufferError                _oh                        ipsystem
+BytesWarning               _sh                        is
+DeprecationWarning         a                          isinstance
+EOFError                   abs                        issubclass
+Ellipsis                   all                        iter
+EnvironmentError           and                        jobs
+Exception                  any                        lambda
+False                      apply                      lc
+FloatingPointError         as                         ldir
+FutureWarning              assert                     len
+GeneratorExit              basestring                 less
+IOError                    bin                        lf
+ImportError                bool                       license
+ImportWarning              break                      list
+In                         buffer                     lk
+IndentationError           bytearray                  ll
+IndexError                 bytes                      locals
+KeyError                   callable                   long
+KeyboardInterrupt          cat                        ls
+LookupError                chr                        lx
+MemoryError                class                      map
+NameError                  classmethod                max
+None                       clear                      memoryview
+NotImplemented             cmp                        min
+NotImplementedError        coerce                     mkdir
+OSError                    compile                    mv
+Out                        complex                    next
+OverflowError              continue                   not
+PendingDeprecationWarning  copyright                  object
+ReferenceError             cp                         oct
+RuntimeError               credits                    open
+RuntimeWarning             def                        or
+StandardError              del                        ord
+StopIteration              delattr                    pass
+SyntaxError                dict                       pow
+SyntaxWarning              dir                        print
+SystemError                divmod                     property
+SystemExit                 dreload                    quit
+TabError                   elif                       raise
+True                       else                       range
+TypeError                  enumerate                  raw_input
+UnboundLocalError          eval                       reduce
+UnicodeDecodeError         except                     reload
+UnicodeEncodeError         exec                       repr
+UnicodeError               execfile                   return
+UnicodeTranslateError      exit                       reversed
+UnicodeWarning             file                       rm
+UserWarning                filter                     rmdir
+ValueError                 finally                    round
+Warning                    float                      set
+ZeroDivisionError          for                        setattr
+_                          format                     slice
+__                         from                       sorted
+__IP                       frozenset                  staticmethod
+__IPYTHON__                getattr                    str
+__IPYTHON__active          global                     sum
+___                        globals                    super
+__debug__                  hasattr                    try
+__doc__                    hash                       tuple
+__import__                 help                       type
+__name__                   hex                        unichr
+__package__                i                          unicode
+_dh                        id                         vars
+_i                         if                         while
+_i1                        import                     with
+_i2                        in                         xrange
+_i3                        input                      yield
+_i4                        int                        zip
+
+In [5]: 
+
+In [6]: long_var = 5
+
+In [7]: lon
+long      long_var  
+
+In [7]: 
+
+In [8]: import sqlite3
+
+In [9]: cd 09/
+/home/bob/public/python-course/09
+
+In [10]: conn = sqlite3.connect('file_database')
+
+In [11]: c = conn.cursor()
+
+In [12]: c.execute("CREATE TABLE people (id INTEGER, name TEXT, surname TEXT, phone TEXT)")
+Out[12]: <sqlite3.Cursor object at 0x2bd87a0>
+
+In [13]: res = c.execute("SELECT 2 + 2")
+
+In [14]: res
+Out[14]: <sqlite3.Cursor object at 0x2bd87a0>
+
+In [15]: 
+
+In [16]: c.execute("INSERT INTO people (1, 'Sam', 'Smith', '123')")
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+
+/home/bob/public/python-course/09/<ipython console> in <module>()
+
+OperationalError: near "1": syntax error
+
+In [17]: c.execute("INSERT INTO people VALUES (1, 'Sam', 'Smith', '123')")
+Out[17]: <sqlite3.Cursor object at 0x2bd87a0>
+
+In [18]: conn.commit()
+
+In [19]: c.execute("INSERT INTO people VALUES (1, 'Sam', 'Smith', '123')")
+Out[19]: <sqlite3.Cursor object at 0x2bd87a0>
+
+In [20]: conn.commit()
+In [23]: for i in range(10):    print ic.execute("CREATE TABLE people (id INTEGER, name TEXT, surna(1, u'Sam', u'Smith', u'123')
+------------------------------------------------------------
+   File "<ipython console>", line 2
+     print ic.execute("CREATE TABLE people (id INTEGER, name TEXT, surna(1, u'Sam', u'Smith', u'123')
+                                                                                                    ^E TSyntaxError: EOL while scanning string literal INTEGER, name 
+In [25]: (1, u'Sam', u'Smith', u'12
+
+ INTEGER, name TEX
+GER, name TEXT, surn
